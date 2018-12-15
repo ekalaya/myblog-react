@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import axios from '../../axios';
 import './FullPost.css';
 
 class FullPost extends Component {
@@ -10,7 +10,7 @@ class FullPost extends Component {
     componentDidUpdate(){
         if(this.props.id) {
             if( !this.state.loadedPosts || (this.state.loadedPosts && this.state.loadedPosts.id !== this.props.id) ){
-                axios.get( 'https://jsonplaceholder.typicode.com/posts/' + this.props.id)
+                axios.get( '/posts/' + this.props.id)
                 .then( response => {
                     this.setState({loadedPosts: response.data});
                     //console.log(response);
@@ -19,6 +19,15 @@ class FullPost extends Component {
             }
             
         }
+    }
+
+    deletePostHandler = () => {
+        axios.delete( '/posts/' + this.props.id)
+                .then( response => {
+                    //this.setState({loadedPosts: response.data});
+                    console.log(response);
+                    
+                });
     }
 
     render () {
@@ -30,9 +39,9 @@ class FullPost extends Component {
             post = (
                 <div className="FullPost">
                     <h1>{this.state.loadedPosts.title}</h1>
-                    <p>{this.state.loadedPosts.content}</p>
+                    <p>{this.state.loadedPosts.body}</p>
                     <div className="Edit">
-                        <button className="Delete">Delete</button>
+                        <button className="Delete" onClick={this.deletePostHandler(this.state.loadedPosts.id)}>Delete</button>
                     </div>
                 </div>
     
